@@ -2,17 +2,18 @@ package com.keltenfalez.customer;
 
 import com.keltenfalez.clients.fraud.FraudCheckResponse;
 import com.keltenfalez.clients.fraud.FraudClient;
+import com.keltenfalez.clients.notification.NotificationClient;
+import com.keltenfalez.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @AllArgsConstructor
 @Service
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -27,5 +28,12 @@ public class CustomerService {
         if (fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("fraudster");
         }
+
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Notification has been sent to %s", customer.getFirstName()));
+
+        notificationClient.sendNotification(notificationRequest);
     }
 }
