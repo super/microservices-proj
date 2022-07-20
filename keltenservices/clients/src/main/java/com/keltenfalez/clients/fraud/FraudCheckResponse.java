@@ -1,4 +1,4 @@
-package com.keltenfalez.fraud;
+package com.keltenfalez.clients.fraud;
 
 public record FraudCheckResponse(Boolean isFraudster) {
 }
