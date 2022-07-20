@@ -12,6 +12,7 @@
     <module>customer</module>
     <module>fraud</module>
     <module>eureka-server</module>
+      <module>zuul</module>
   </modules>
 
   <name>keltenservices</name>
