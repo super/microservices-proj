@@ -13,8 +13,9 @@
     <module>fraud</module>
     <module>eureka-server</module>
     <module>clients</module>
-    <module>Notification</module>
+    <module>notification</module>
       <module>zuul-api-gateway</module>
+      <module>amqp</module>
   </modules>
 
   <name>keltenservices</name>
