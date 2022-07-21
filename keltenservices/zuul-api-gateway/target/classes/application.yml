@@ -1,0 +1,37 @@
+server:
+  port: 8050
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+  application:
+    name: zuul-edge-server
+zuul:
+  routes:
+    customer:
+      path: /api/v1/customers**
+      url: http://localhost:8080
+      stripPrefix: false
+    fraud:
+      path: /api/v1/fraud-check/**
+      url: http://localhost:8081
+      strip-prefix: false
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 60000
+
+# The Hystrix framework library helps to control the interaction between services by providing fault tolerance and latency tolerance.
+# It improves overall resilience of the system by isolating the failing services and stopping the cascading effect of failures.
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
