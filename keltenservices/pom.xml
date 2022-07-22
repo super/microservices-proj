@@ -16,6 +16,7 @@
     <module>notification</module>
       <module>zuul-api-gateway</module>
       <module>amqp</module>
+    <module>kafka</module>
   </modules>
 
   <name>keltenservices</name>

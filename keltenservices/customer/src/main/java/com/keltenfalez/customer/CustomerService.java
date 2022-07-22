@@ -5,6 +5,7 @@ import com.keltenfalez.clients.fraud.FraudCheckResponse;
 import com.keltenfalez.clients.fraud.FraudClient;
 import com.keltenfalez.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final FraudClient fraudClient;
     private final RabbitMQMessageProducer rabbitMQMessageProducer;
+    private KafkaTemplate<String, String> kafkaTemplate;
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
                 .firstName(request.firstName())
@@ -34,10 +36,8 @@ public class CustomerService {
                 customer.getEmail(),
                 String.format("Notification has been sent to %s", customer.getFirstName()));
 
-        rabbitMQMessageProducer.publish(
-                notificationRequest,
-                "internal.exchange",
-                "internal.notification-key"
-        );
+        kafkaTemplate.send("kafkaTopic", notificationRequest.message());
+
     }
+
 }
